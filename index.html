@@ -3214,10 +3214,10 @@
            features (list of bullet points shown on the card and in the
            order modal). Just edit the [PLACEHOLDER] entry below directly. */
         ticketsList: [
-          { name: "Passeport Normal", price: "25 DT", numericPrice: 25, tag: "", features: ["Accès standard au site", "Carnet de tampons", "Accès à toutes les zones publiques"] },
-          { name: "Passeport Pro", price: "120 DT", numericPrice: 120, tag: "Populaire", features: ["Coupe-file prioritaire", "Accès B2B Hub", "Accès Zones Ambrées"] },
-          { name: "Passeport Diplomatique", price: "230 DT", numericPrice: 230, tag: "", features: ["Accès prioritaire", "parking VIP", "Accès lounge diplomatique"] },
-          { name: "VIP Gold", price: "350 DT", numericPrice: 350, tag: "VIP", features: ["Accès prioritaire illimité", "Table réservée", "Cocktail de bienvenue", "Parking VIP"] }
+          { slug: "standard", name: "Passeport Normal", price: "25 DT", numericPrice: 25, tag: "", features: ["Accès standard au site", "Carnet de tampons", "Accès à toutes les zones publiques"] },
+          { slug: "pro", name: "Passeport Pro", price: "120 DT", numericPrice: 120, tag: "Populaire", features: ["Coupe-file prioritaire", "Accès B2B Hub", "Accès Zones Ambrées"] },
+          { slug: "diplomatique", name: "Passeport Diplomatique", price: "230 DT", numericPrice: 230, tag: "", features: ["Accès prioritaire", "parking VIP", "Accès lounge diplomatique"] },
+          { slug: "vip", name: "VIP Gold", price: "350 DT", numericPrice: 350, tag: "VIP", features: ["Accès prioritaire illimité", "Table réservée", "Cocktail de bienvenue", "Parking VIP"] }
         ],
         ticketCta: "Choisir ce Passeport",
         stickyCta: "Réserver mon Passeport",
@@ -3328,10 +3328,10 @@
         },
         tickets: { eyebrow: "Ticketing", title: "Passports & Pricing" },
         ticketsList: [
-          { name: "Standard Passport", price: "25 DT", numericPrice: 25, tag: "", features: ["Standard site access", "Stamp booklet", "Access to all public zones"] },
-          { name: "Pro Passport", price: "120 DT", numericPrice: 120, tag: "Popular", features: ["Priority fast lane", "B2B Hub access", "Amber Zones access"] },
-          { name: "Diplomatic Passport", price: "230 DT", numericPrice: 230, tag: "", features: ["Priority access", "VIP parking", "Diplomatic lounge access"] },
-          { name: "VIP Gold", price: "350 DT", numericPrice: 350, tag: "VIP", features: ["Unlimited priority access", "Reserved table", "Welcome cocktail", "VIP parking"] }
+          { slug: "standard", name: "Standard Passport", price: "25 DT", numericPrice: 25, tag: "", features: ["Standard site access", "Stamp booklet", "Access to all public zones"] },
+          { slug: "pro", name: "Pro Passport", price: "120 DT", numericPrice: 120, tag: "Popular", features: ["Priority fast lane", "B2B Hub access", "Amber Zones access"] },
+          { slug: "diplomatique", name: "Diplomatic Passport", price: "230 DT", numericPrice: 230, tag: "", features: ["Priority access", "VIP parking", "Diplomatic lounge access"] },
+          { slug: "vip", name: "VIP Gold", price: "350 DT", numericPrice: 350, tag: "VIP", features: ["Unlimited priority access", "Reserved table", "Welcome cocktail", "VIP parking"] }
         ],
         ticketCta: "Choose this Passport",
         stickyCta: "Get My Passport",
@@ -3442,10 +3442,10 @@
         },
         tickets: { eyebrow: "التذاكر", title: "جوازات السفر والأسعار" },
         ticketsList: [
-          { name: "جواز عادي", price: "25 د.ت", numericPrice: 25, tag: "", features: ["دخول عادي للموقع", "دفتر أختام", "الوصول لكل المناطق العامة"] },
-          { name: "جواز احترافي", price: "120 د.ت", numericPrice: 120, tag: "الأكثر طلباً", features: ["ممر أولوية سريع", "دخول مركز B2B", "دخول المناطق الكهرمانية"] },
-          { name: "جواز دبلوماسي", price: "230 د.ت", numericPrice: 230, tag: "", features: ["أولوية دخول", "موقف سيارات VIP", "دخول الصالة الدبلوماسية"] },
-          { name: "VIP Gold", price: "350 د.ت", numericPrice: 350, tag: "VIP", features: ["أولوية دخول غير محدودة", "طاولة محجوزة", "كوكتيل ترحيبي", "موقف سيارات VIP"] }
+          { slug: "standard", name: "جواز عادي", price: "25 د.ت", numericPrice: 25, tag: "", features: ["دخول عادي للموقع", "دفتر أختام", "الوصول لكل المناطق العامة"] },
+          { slug: "pro", name: "جواز احترافي", price: "120 د.ت", numericPrice: 120, tag: "الأكثر طلباً", features: ["ممر أولوية سريع", "دخول مركز B2B", "دخول المناطق الكهرمانية"] },
+          { slug: "diplomatique", name: "جواز دبلوماسي", price: "230 د.ت", numericPrice: 230, tag: "", features: ["أولوية دخول", "موقف سيارات VIP", "دخول الصالة الدبلوماسية"] },
+          { slug: "vip", name: "VIP Gold", price: "350 د.ت", numericPrice: 350, tag: "VIP", features: ["أولوية دخول غير محدودة", "طاولة محجوزة", "كوكتيل ترحيبي", "موقف سيارات VIP"] }
         ],
         ticketCta: "اختر هذا الجواز",
         stickyCta: "احجز جواز سفري",
@@ -3996,19 +3996,59 @@
     document.getElementById('ticketModalClose').addEventListener('click', closeTicketModal);
     document.getElementById('ticketModalBackdrop').addEventListener('click', closeTicketModal);
 
-    document.getElementById('modalCheckoutForm').addEventListener('submit', (e) => {
+    document.getElementById('modalCheckoutForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      closeTicketModal();
+      const t = translations[currentLang];
+      const tk = t.ticketsList[activeTicketIdx];
       const name = document.getElementById('tktName').value;
-      const refNum = 'SFFF-TKT-' + Math.floor(10000 + Math.random() * 90000);
+      const email = document.getElementById('tktEmail').value;
+      const phone = document.getElementById('tktPhone').value;
 
-      showSuccessModal(
-        currentLang === 'fr' ? 'Commande Confirmée !' : (currentLang === 'en' ? 'Order Confirmed!' : 'تم تأكيد الطلب!'),
-        currentLang === 'fr' ? `Merci ${name} ! Votre réservation a été enregistrée avec succès. Redirection vers le paiement sécurisé.` :
-          (currentLang === 'en' ? `Thank you ${name}! Your passport reservation has been saved. Redirecting to payment.` : `شكراً ${name}! تم حفظ حجزك بنجاح. جارٍ التحويل للدفع.`),
-        refNum
-      );
-      e.target.reset();
+      const submitBtn = document.getElementById('modalConfirm');
+      const originalLabel = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = currentLang === 'fr' ? 'Envoi…' : (currentLang === 'en' ? 'Sending…' : 'جارٍ الإرسال…');
+
+      try {
+        const res = await fetch('api/passport-reservation.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName: name,
+            email: email,
+            phone: phone,
+            quantity: activeQty,
+            passportType: tk.slug
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || 'request-failed');
+
+        // Reservation saved — now start payment and send the browser to
+        // the provider's checkout. The reservation only becomes "paid"
+        // once api/payment-webhook.php hears back from the provider, not
+        // from this redirect alone.
+        submitBtn.textContent = currentLang === 'fr' ? 'Redirection vers le paiement…' :
+          (currentLang === 'en' ? 'Redirecting to payment…' : 'جارٍ التحويل إلى الدفع…');
+
+        const payRes = await fetch('api/payment-init.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reference: data.reference })
+        });
+        const payData = await payRes.json();
+        if (!payRes.ok || !payData.success || !payData.checkoutUrl) {
+          throw new Error(payData.error || 'payment-init-failed');
+        }
+
+        e.target.reset();
+        window.location.href = payData.checkoutUrl;
+      } catch (err) {
+        alert(currentLang === 'fr' ? "Une erreur est survenue, veuillez réessayer." :
+          (currentLang === 'en' ? 'Something went wrong, please try again.' : 'حدث خطأ، يرجى المحاولة مرة أخرى.'));
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
     });
 
     function showSuccessModal(title, body, ref) {
@@ -4423,18 +4463,47 @@
     document.getElementById('docFillGenerateBtn').addEventListener('click', generateFilledPdf);
 
     /* Pro Form Submit */
-    document.getElementById('proForm').addEventListener('submit', (e) => {
+    document.getElementById('proForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('proName').value;
-      const refNum = 'SFFF-PRO-' + Math.floor(10000 + Math.random() * 90000);
+      const email = document.getElementById('proEmail').value;
+      const phone = document.getElementById('proPhone').value;
+      const message = document.getElementById('proMessage').value;
 
-      showSuccessModal(
-        currentLang === 'fr' ? 'Demande Envoyée !' : (currentLang === 'en' ? 'Request Sent!' : 'تم إرسال الطلب!'),
-        currentLang === 'fr' ? `Merci ${name} ! Votre dossier de partenariat a bien été transmis à l'équipe organisatrice.` :
-          (currentLang === 'en' ? `Thank you ${name}! Your partnership inquiry has been submitted successfully.` : `شكراً ${name}! تم إرسال ملف الشراكة بنجاح.`),
-        refNum
-      );
-      e.target.reset();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalLabel = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = currentLang === 'fr' ? 'Envoi…' : (currentLang === 'en' ? 'Sending…' : 'جارٍ الإرسال…');
+
+      try {
+        const res = await fetch('api/application.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName: name,
+            email: email,
+            phone: phone,
+            applicationTypeIndex: activeProTab,
+            message: message
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || 'request-failed');
+
+        showSuccessModal(
+          currentLang === 'fr' ? 'Demande Envoyée !' : (currentLang === 'en' ? 'Request Sent!' : 'تم إرسال الطلب!'),
+          currentLang === 'fr' ? `Merci ${name} ! Votre dossier de partenariat a bien été transmis à l'équipe organisatrice.` :
+            (currentLang === 'en' ? `Thank you ${name}! Your partnership inquiry has been submitted successfully.` : `شكراً ${name}! تم إرسال ملف الشراكة بنجاح.`),
+          currentLang === 'fr' ? 'Demande reçue' : (currentLang === 'en' ? 'Request received' : 'تم استلام الطلب')
+        );
+        e.target.reset();
+      } catch (err) {
+        alert(currentLang === 'fr' ? "Une erreur est survenue, veuillez réessayer." :
+          (currentLang === 'en' ? 'Something went wrong, please try again.' : 'حدث خطأ، يرجى المحاولة مرة أخرى.'));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
     });
 
     /* ======================= STAMP COLLECTOR SIMULATOR ======================= */

@@ -9,3 +9,6 @@ desktop.ini
 # Editor/IDE
 .vscode/
 *.swp
+
+# Backend secrets — copy config/database.example.php to config/database.php locally
+config/database.php
