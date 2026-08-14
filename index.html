@@ -1802,6 +1802,146 @@
         animation: none !important;
       }
     }
+
+    /* ======================= SFFF COINS: 3D app.png rig + pinned labels ======================= */
+    .coins-3d-rig {
+      position: relative;
+      perspective: 1200px;
+      isolation: isolate;
+    }
+
+    .coins-3d-tilt {
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(6deg) rotateY(-10deg);
+      transition: transform 0.15s ease-out;
+      animation: coins3dFloat 6s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .coins-3d-tilt img {
+      display: block;
+      border-radius: 1rem;
+      box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Warm glow underneath, matching the passport-hero pedestal language */
+    .coins-3d-rig::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 2%;
+      width: 70%;
+      height: 30%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.4) 0%, rgba(212, 175, 55, 0.15) 45%, rgba(212, 175, 55, 0) 75%);
+      filter: blur(18px);
+      z-index: 0;
+      animation: passportGlowPulse 5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes coins3dFloat {
+
+      0%,
+      100% {
+        transform: rotateX(6deg) rotateY(-10deg) translateY(0);
+      }
+
+      50% {
+        transform: rotateX(4deg) rotateY(-7deg) translateY(-10px);
+      }
+    }
+
+    /* Callout pins: label chip + connector line, positioned around the image */
+    .coins-pin {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 2;
+      animation: coinsPinFloat 4.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .coins-pin-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #D4AF37;
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2), 0 0 10px rgba(212, 175, 55, 0.8);
+      flex-shrink: 0;
+    }
+
+    .coins-pin-label {
+      background: rgba(10, 10, 11, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: #f5f5f5;
+      font-size: 0.7rem;
+      font-weight: 700;
+      white-space: nowrap;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+    }
+
+    .coins-pin-1 {
+      top: 6%;
+      left: -6%;
+      animation-delay: 0s;
+    }
+
+    .coins-pin-2 {
+      top: 30%;
+      right: -10%;
+      flex-direction: row-reverse;
+      animation-delay: 0.7s;
+    }
+
+    .coins-pin-3 {
+      bottom: 22%;
+      left: -8%;
+      animation-delay: 1.4s;
+    }
+
+    .coins-pin-4 {
+      bottom: 0%;
+      right: -6%;
+      flex-direction: row-reverse;
+      animation-delay: 2.1s;
+    }
+
+    @keyframes coinsPinFloat {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @media (max-width: 1023px) {
+      .coins-pin {
+        display: none;
+      }
+
+      .coins-3d-tilt {
+        transform: none;
+        animation: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .coins-3d-rig::before,
+      .coins-3d-tilt,
+      .coins-pin {
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 
@@ -1848,6 +1988,7 @@
           <a href="#future-food-lab" class="nav-link whitespace-nowrap" data-i18n="nav.lab">Future Food Lab</a>
           <a href="#programmation" class="nav-link whitespace-nowrap" data-i18n="nav.programmation">Programmation</a>
           <a href="#zones" class="nav-link whitespace-nowrap" data-i18n="nav.zones">8 Zones</a>
+          <a href="#coins" class="nav-link whitespace-nowrap" data-i18n="nav.coins">SFFF Coins</a>
           <a href="#tarifs" class="nav-link whitespace-nowrap" data-i18n="nav.tarifs">Tarifs</a>
           <a href="#documents" class="nav-link whitespace-nowrap" data-i18n="nav.documents">Documents</a>
         </nav>
@@ -1969,6 +2110,7 @@
         <a href="#programmation" class="mobile-nav-link text-neutral-300 hover:text-gold"
           data-i18n="nav.programmation">Programmation</a>
         <a href="#zones" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.zones">8 Zones</a>
+        <a href="#coins" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.coins">SFFF Coins</a>
         <a href="#tarifs" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.tarifs">Tarifs</a>
         <a href="#documents" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.documents">Documents</a>
       </nav>
@@ -2463,6 +2605,104 @@
         </div>
         <div id="awardsGrid" class="grid sm:grid-cols-2 gap-4"></div>
         <!-- awardsSeeMoreContainer removed: Gamification shows all items always -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SFFF COINS / COMPANION APP PROMO ================= -->
+  <section id="coins" class="py-24 px-5 md:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none opacity-30"
+      style="background:radial-gradient(circle at 20% 30%, rgba(212,175,55,0.15), transparent 60%);"></div>
+    <div class="max-w-6xl mx-auto relative grid lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-6 order-2 lg:order-1">
+        <div id="coins3dRig" class="coins-3d-rig px-6 md:px-10">
+          <div id="coins3dTilt" class="coins-3d-tilt">
+            <img src="assets/app.png" alt="SFFF 2026 Companion App — SFFF Coins Cashless Wallet" class="w-full h-auto">
+          </div>
+          <div class="coins-pin coins-pin-1">
+            <span class="coins-pin-dot"></span>
+            <span class="coins-pin-label" id="coinsPin1">Recharge à l'Accueil</span>
+          </div>
+          <div class="coins-pin coins-pin-2">
+            <span class="coins-pin-dot"></span>
+            <span class="coins-pin-label" id="coinsPin2">Paiement QR</span>
+          </div>
+          <div class="coins-pin coins-pin-3">
+            <span class="coins-pin-dot"></span>
+            <span class="coins-pin-label" id="coinsPin3">Solde en temps réel</span>
+          </div>
+          <div class="coins-pin coins-pin-4">
+            <span class="coins-pin-dot"></span>
+            <span class="coins-pin-label" id="coinsPin4">1 Coin = 1 Dinar</span>
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-6 order-1 lg:order-2 fade-up">
+        <p class="text-gold text-xs font-bold uppercase tracking-[0.3em] mb-3" data-i18n="coins.eyebrow">Application
+          Compagnon</p>
+        <h2 id="coinsTitle" class="font-display font-extrabold text-3xl md:text-5xl mb-5">SFFF Coins — Le Portefeuille
+          Cashless du Festival</h2>
+        <p id="coinsDesc" class="text-neutral-300 text-base leading-relaxed mb-8">
+          Rechargez votre solde en SFFF Coins (1 Coin = 1 Dinar) à un desk Accueil, puis payez chaque stand en
+          scannant simplement votre QR code. Plus besoin d'espèces ni de monnaie sur le festival.
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-4 mb-8">
+          <div class="panel rounded-xl p-4 flex items-start gap-3 border border-neutral-800">
+            <span class="text-gold shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h3v-4z"/></svg>
+            </span>
+            <div>
+              <p id="coinsFeat1Title" class="font-bold text-sm text-white mb-1">Rechargez à l'Accueil</p>
+              <p id="coinsFeat1Desc" class="text-xs text-neutral-400 leading-relaxed">Créditez votre solde en Dinars
+                à n'importe quel desk Accueil du site.</p>
+            </div>
+          </div>
+          <div class="panel rounded-xl p-4 flex items-start gap-3 border border-neutral-800">
+            <span class="text-gold shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 14h2v2h-2zM14 19h2v2h-2zM19 19h2v2h-2z"/></svg>
+            </span>
+            <div>
+              <p id="coinsFeat2Title" class="font-bold text-sm text-white mb-1">Payez par QR Code</p>
+              <p id="coinsFeat2Desc" class="text-xs text-neutral-400 leading-relaxed">Montrez votre QR code à
+                n'importe quel stand pour régler en un instant.</p>
+            </div>
+          </div>
+          <div class="panel rounded-xl p-4 flex items-start gap-3 border border-neutral-800">
+            <span class="text-gold shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </span>
+            <div>
+              <p id="coinsFeat3Title" class="font-bold text-sm text-white mb-1">Suivez votre Solde</p>
+              <p id="coinsFeat3Desc" class="text-xs text-neutral-400 leading-relaxed">Consultez votre solde et
+                l'historique de vos achats en temps réel dans l'app.</p>
+            </div>
+          </div>
+          <div class="panel rounded-xl p-4 flex items-start gap-3 border border-neutral-800">
+            <span class="text-gold shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <div>
+              <p id="coinsFeat4Title" class="font-bold text-sm text-white mb-1">Sans Espèces, Sans Attente</p>
+              <p id="coinsFeat4Desc" class="text-xs text-neutral-400 leading-relaxed">Fini la monnaie et les files
+                d'attente aux caisses — payez en un scan.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop: QR code linking to the app. Mobile: direct download button. Toggled by JS (updateCoinsDownloadUI). -->
+        <div id="coinsQrWrap" class="hidden items-start gap-4">
+          <div id="coinsQrCode" class="p-3 rounded-xl bg-white inline-block"></div>
+          <div>
+            <p id="coinsQrLabel" class="text-sm font-bold text-white mb-1">Scannez pour télécharger l'application</p>
+            <p class="text-xs text-neutral-500">fastfoodfestival.com</p>
+          </div>
+        </div>
+        <a id="coinsDownloadBtn" href="https://fastfoodfestival.com" target="_blank" rel="noopener"
+          class="hidden btn-primary items-center gap-2 px-6 py-3 rounded-full font-bold text-sm tracking-wide">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span id="coinsDownload">Télécharger l'application</span>
+        </a>
       </div>
     </div>
   </section>
@@ -3037,6 +3277,9 @@
     </div>
   </div>
 
+  <!-- qrcodejs: renders the "download the app" QR code shown to desktop visitors -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <script>
     /* ======================================================================
        DOCUMENTS UTILES — add or remove a document HERE, in one place.
@@ -3106,7 +3349,7 @@
     /* ======================= TRANSLATIONS ======================= */
     const translations = {
       fr: {
-        nav: { brandSub: "Tunis Global Village", home: "Accueil", concept: "Concept", pavillons: "Pavillons", lab: "Future Food Lab", programmation: "Programmation", zones: "8 Zones", tarifs: "Tarifs", documents: "Documents", espacePro: "Espace Pro", espaceAmbassade: "Ambassades", reserver: "Réserver mon Passeport", language: "Langue", seeMore: "Voir plus" },
+        nav: { brandSub: "Tunis Global Village", home: "Accueil", concept: "Concept", pavillons: "Pavillons", lab: "Future Food Lab", programmation: "Programmation", zones: "8 Zones", coins: "SFFF Coins", tarifs: "Tarifs", documents: "Documents", espacePro: "Espace Pro", espaceAmbassade: "Ambassades", reserver: "Réserver mon Passeport", language: "Langue", seeMore: "Voir plus" },
         documents: {
           eyebrow: "Ressources", title: "Documents Utiles",
           intro: "Consultez ou téléchargez les dossiers officiels du festival, classés par profil. Les formulaires marqués « Remplir en ligne » peuvent être complétés directement sur le site.",
@@ -3164,6 +3407,7 @@
           { title: "Cooking Shows Célébrités", desc: "Battles culinaires en direct, diffusés sur le CIA Network et ses +2M d'abonnés.", icon: "tv" }
         ],
         gami: { eyebrow: "Gamification", title: "Le Passeport Collector & SFFF Awards", desc: "Collectionnez les 42 tampons du Passeport Saveurs à travers les pavillons nationaux et tentez de remporter le Grand Prix SFFF 2026, en édition physique ou digitale.", stampBtn: "Tamponner !" },
+        coins: { eyebrow: "Application Compagnon", title: "SFFF Coins — Le Portefeuille Cashless du Festival", desc: "Rechargez votre solde en SFFF Coins (1 Coin = 1 Dinar) à un desk Accueil, puis payez chaque stand en scannant simplement votre QR code. Plus besoin d'espèces ni de monnaie sur le festival.", feat1Title: "Rechargez à l'Accueil", feat1Desc: "Créditez votre solde en Dinars à n'importe quel desk Accueil du site.", feat2Title: "Payez par QR Code", feat2Desc: "Montrez votre QR code à n'importe quel stand pour régler en un instant.", feat3Title: "Suivez votre Solde", feat3Desc: "Consultez votre solde et l'historique de vos achats en temps réel dans l'app.", feat4Title: "Sans Espèces, Sans Attente", feat4Desc: "Fini la monnaie et les files d'attente aux caisses — payez en un scan.", download: "Télécharger l'application", qrLabel: "Scannez pour télécharger l'application", pin1: "Recharge à l'Accueil", pin2: "Paiement QR", pin3: "Solde en temps réel", pin4: "1 Coin = 1 Dinar" },
         passport: { name: "Le Passeport Collector", desc: "42 tampons à collectionner pour le Grand Prix" },
         awards: [
           { title: "Médaille de l'Honneur Diplomatique", icon: "medal" },
@@ -3226,7 +3470,7 @@
         footer: { desc: "Le rendez-vous incontournable de l'été tunisien : gastronomie, culture et innovation réunies sur 1,8 km de corniche.", linksTitle: "Navigation", contactTitle: "Contact", location: "Tunis Lac II, Tunis, Tunisie", copyright: "© 2026 SFFF — Street & Fast Food Fest. Tous droits réservés." }
       },
       en: {
-        nav: { brandSub: "Tunis Global Village", home: "Home", concept: "Concept", pavillons: "Pavilions", lab: "Future Food Lab", programmation: "Program", zones: "8 Zones", tarifs: "Pricing", documents: "Documents", espacePro: "Pro Space", espaceAmbassade: "Embassies", reserver: "Get My Passport", language: "Language", seeMore: "See more" },
+        nav: { brandSub: "Tunis Global Village", home: "Home", concept: "Concept", pavillons: "Pavilions", lab: "Future Food Lab", programmation: "Program", zones: "8 Zones", coins: "SFFF Coins", tarifs: "Pricing", documents: "Documents", espacePro: "Pro Space", espaceAmbassade: "Embassies", reserver: "Get My Passport", language: "Language", seeMore: "See more" },
         documents: {
           eyebrow: "Resources", title: "Useful Documents",
           intro: "View or download the festival's official documents, sorted by profile. Forms marked \"Fill Online\" can be completed directly on the site.",
@@ -3284,6 +3528,7 @@
           { title: "Celebrity Cooking Shows", desc: "Live culinary battles, broadcast on the CIA Network to its +2M subscribers.", icon: "tv" }
         ],
         gami: { eyebrow: "Gamification", title: "The Collector Passport & SFFF Awards", desc: "Collect all 42 stamps of the Flavours Passport across national pavilions and try to win the SFFF 2026 Grand Prix.", stampBtn: "Stamp Passport!" },
+        coins: { eyebrow: "Companion App", title: "SFFF Coins — The Festival's Cashless Wallet", desc: "Top up your balance in SFFF Coins (1 Coin = 1 Dinar) at any Accueil desk, then pay every stand by simply scanning your QR code. No cash, no change needed anywhere on site.", feat1Title: "Top Up at Accueil", feat1Desc: "Credit your balance in Dinars at any Accueil desk on site.", feat2Title: "Pay with a QR Code", feat2Desc: "Show your QR code at any stand to pay instantly.", feat3Title: "Track Your Balance", feat3Desc: "See your balance and purchase history live in the app.", feat4Title: "No Cash, No Waiting", feat4Desc: "No more change or checkout queues — pay in a single scan.", download: "Download the App", qrLabel: "Scan to download the app", pin1: "Top Up at Accueil", pin2: "QR Payment", pin3: "Live Balance", pin4: "1 Coin = 1 Dinar" },
         passport: { name: "The Collector Passport", desc: "42 stamps to collect for the Grand Prix" },
         awards: [
           { title: "Diplomatic Medal of Honor", icon: "medal" },
@@ -3340,7 +3585,7 @@
         footer: { desc: "The unmissable event of the Tunisian summer: gastronomy, culture and innovation together along 1.8 km of waterfront.", linksTitle: "Navigation", contactTitle: "Contact", location: "Tunis Lac II, Tunis, Tunisia", copyright: "© 2026 SFFF — Street & Fast Food Fest. All rights reserved." }
       },
       ar: {
-        nav: { brandSub: "القرية العالمية تونس", home: "الرئيسية", concept: "المفهوم", pavillons: "الأجنحة", lab: "مختبر الطعام المستقبلي", programmation: "البرنامج", zones: "المناطق 8", tarifs: "الأسعار", documents: "الوثائق", espacePro: "فضاء المحترفين", espaceAmbassade: "السفارات", reserver: "احجز جواز سفري", language: "اللغة", seeMore: "عرض المزيد" },
+        nav: { brandSub: "القرية العالمية تونس", home: "الرئيسية", concept: "المفهوم", pavillons: "الأجنحة", lab: "مختبر الطعام المستقبلي", programmation: "البرنامج", zones: "المناطق 8", coins: "عملات SFFF", tarifs: "الأسعار", documents: "الوثائق", espacePro: "فضاء المحترفين", espaceAmbassade: "السفارات", reserver: "احجز جواز سفري", language: "اللغة", seeMore: "عرض المزيد" },
         documents: {
           eyebrow: "الموارد", title: "وثائق مفيدة",
           intro: "اطّلع على وثائق المهرجان الرسمية أو حمّلها، مصنّفة حسب الفئة. النماذج المصنّفة بـ«التعبئة عبر الإنترنت» يمكن ملؤها مباشرة على الموقع.",
@@ -3398,6 +3643,7 @@
           { title: "عروض طهي مع المشاهير", desc: "مبارزات طهي مباشرة تُبث على شبكة CIA Network وأكثر من مليوني مشترك.", icon: "tv" }
         ],
         gami: { eyebrow: "التحفيز باللعب", title: "جواز الجمع و جوائز SFFF", desc: "اجمع 42 ختماً من جواز النكهات عبر الأجنحة الوطنية وحاول الفوز بالجائزة الكبرى لـ SFFF 2026.", stampBtn: "ختم الجواز !" },
+        coins: { eyebrow: "التطبيق المرافق", title: "عملات SFFF — المحفظة الرقمية للمهرجان", desc: "اشحن رصيدك بعملات SFFF (1 عملة = 1 دينار) في أي مكتب استقبال، ثم ادفع في أي جناح بمسح رمز QR الخاص بك. لا حاجة للنقود أو الفكة في المهرجان.", feat1Title: "اشحن رصيدك في الاستقبال", feat1Desc: "اشحن رصيدك بالدينار في أي مكتب استقبال بالموقع.", feat2Title: "ادفع برمز QR", feat2Desc: "اعرض رمز QR الخاص بك في أي جناح للدفع الفوري.", feat3Title: "تابع رصيدك", feat3Desc: "اطّلع على رصيدك وسجل مشترياتك مباشرة في التطبيق.", feat4Title: "بدون نقود، بدون انتظار", feat4Desc: "لا مزيد من الفكة أو طوابير الدفع — ادفع بمسحة واحدة.", download: "تحميل التطبيق", qrLabel: "امسح لتحميل التطبيق", pin1: "الشحن في الاستقبال", pin2: "الدفع بـ QR", pin3: "الرصيد المباشر", pin4: "1 عملة = 1 دينار" },
         passport: { name: "جواز الجمع", desc: "42 ختماً للجمع من أجل الجائزة الكبرى" },
         awards: [
           { title: "وسام الشرف الدبلوماسي", icon: "medal" },
@@ -3481,7 +3727,10 @@
       globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
       search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
       x: '<path d="M18 6 6 18M6 6l12 12"/>',
-      'clipboard-list': '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6M9 8h1"/>'
+      'clipboard-list': '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6M9 8h1"/>',
+      'qr-code': '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 14h2v2h-2zM14 19h2v2h-2zM19 19h2v2h-2z"/>',
+      wallet: '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h3v-4z"/>',
+      smartphone: '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>'
     };
     function icon(name, cls, size) { size = size || 22; return `<svg class="${cls || ''}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ''}</svg>`; }
 
@@ -4574,6 +4823,22 @@
       document.getElementById('gamiDesc').textContent = t.gami.desc;
       document.getElementById('passportName').textContent = t.passport.name;
       document.getElementById('passportDesc').innerHTML = `${t.gami.progressLabel || 'tampons collectés'} : <span id="stampCount" class="font-bold text-gold text-sm">${collectedStamps}</span> / 42`;
+      document.getElementById('coinsTitle').textContent = t.coins.title;
+      document.getElementById('coinsDesc').textContent = t.coins.desc;
+      document.getElementById('coinsFeat1Title').textContent = t.coins.feat1Title;
+      document.getElementById('coinsFeat1Desc').textContent = t.coins.feat1Desc;
+      document.getElementById('coinsFeat2Title').textContent = t.coins.feat2Title;
+      document.getElementById('coinsFeat2Desc').textContent = t.coins.feat2Desc;
+      document.getElementById('coinsFeat3Title').textContent = t.coins.feat3Title;
+      document.getElementById('coinsFeat3Desc').textContent = t.coins.feat3Desc;
+      document.getElementById('coinsFeat4Title').textContent = t.coins.feat4Title;
+      document.getElementById('coinsFeat4Desc').textContent = t.coins.feat4Desc;
+      document.getElementById('coinsDownload').textContent = t.coins.download;
+      document.getElementById('coinsQrLabel').textContent = t.coins.qrLabel;
+      document.getElementById('coinsPin1').textContent = t.coins.pin1;
+      document.getElementById('coinsPin2').textContent = t.coins.pin2;
+      document.getElementById('coinsPin3').textContent = t.coins.pin3;
+      document.getElementById('coinsPin4').textContent = t.coins.pin4;
       document.getElementById('nightsTitle').textContent = t.nights.title;
       document.getElementById('zonesTitle').textContent = t.zones.title;
       document.getElementById('proTitle').textContent = t.pro.title;
@@ -4715,8 +4980,63 @@
             renderZones(t);
           }
         }
+        updateCoinsDownloadUI();
       }, 150);
     });
+
+    /* ======================= SFFF COINS: QR (desktop) vs download button (mobile) ======================= */
+    let _coinsQrRendered = false;
+    function updateCoinsDownloadUI() {
+      const qrWrap = document.getElementById('coinsQrWrap');
+      const downloadBtn = document.getElementById('coinsDownloadBtn');
+      if (!qrWrap || !downloadBtn) return;
+
+      const isDesktop = window.innerWidth >= 1024;
+
+      if (isDesktop) {
+        downloadBtn.classList.add('hidden'); downloadBtn.classList.remove('flex');
+        qrWrap.classList.remove('hidden'); qrWrap.classList.add('flex');
+        if (!_coinsQrRendered && typeof QRCode !== 'undefined') {
+          new QRCode(document.getElementById('coinsQrCode'), {
+            text: 'https://fastfoodfestival.com',
+            width: 96,
+            height: 96,
+            colorDark: '#0a0a0a',
+            colorLight: '#ffffff'
+          });
+          _coinsQrRendered = true;
+        }
+      } else {
+        qrWrap.classList.add('hidden'); qrWrap.classList.remove('flex');
+        downloadBtn.classList.remove('hidden'); downloadBtn.classList.add('flex');
+      }
+    }
+    updateCoinsDownloadUI();
+
+    /* ======================= SFFF COINS: 3D mouse-follow tilt ======================= */
+    (function initCoins3dTilt() {
+      const rig = document.getElementById('coins3dRig');
+      const tilt = document.getElementById('coins3dTilt');
+      if (!rig || !tilt) return;
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return;
+
+      rig.addEventListener('mousemove', (e) => {
+        if (window.innerWidth < 1024) return;
+        const rect = rig.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        const rotateY = (px - 0.5) * 22;
+        const rotateX = (0.5 - py) * 16;
+        tilt.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        tilt.style.animation = 'none';
+      });
+
+      rig.addEventListener('mouseleave', () => {
+        tilt.style.transform = '';
+        tilt.style.animation = '';
+      });
+    })();
 
     /* ======================= SMART COUNTDOWN ======================= */
     // Event runs Nuit 1 = Sep 19 17:00 → Nuit 15 = Oct 3 17:00
