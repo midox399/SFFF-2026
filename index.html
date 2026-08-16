@@ -1988,7 +1988,7 @@
           <a href="#future-food-lab" class="nav-link whitespace-nowrap" data-i18n="nav.lab">Future Food Lab</a>
           <a href="#programmation" class="nav-link whitespace-nowrap" data-i18n="nav.programmation">Programmation</a>
           <a href="#zones" class="nav-link whitespace-nowrap" data-i18n="nav.zones">8 Zones</a>
-          <a href="#coins" class="nav-link whitespace-nowrap" data-i18n="nav.coins">SFFF Coins</a>
+          <a href="#app" class="nav-link whitespace-nowrap" data-i18n="nav.app">SFFF App</a>
           <a href="#tarifs" class="nav-link whitespace-nowrap" data-i18n="nav.tarifs">Tarifs</a>
           <a href="#documents" class="nav-link whitespace-nowrap" data-i18n="nav.documents">Documents</a>
         </nav>
@@ -2110,7 +2110,7 @@
         <a href="#programmation" class="mobile-nav-link text-neutral-300 hover:text-gold"
           data-i18n="nav.programmation">Programmation</a>
         <a href="#zones" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.zones">8 Zones</a>
-        <a href="#coins" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.coins">SFFF Coins</a>
+        <a href="#app" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.app">SFFF App</a>
         <a href="#tarifs" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.tarifs">Tarifs</a>
         <a href="#documents" class="mobile-nav-link text-neutral-300 hover:text-gold" data-i18n="nav.documents">Documents</a>
       </nav>
@@ -2610,7 +2610,7 @@
   </section>
 
   <!-- ================= SFFF COINS / COMPANION APP PROMO ================= -->
-  <section id="coins" class="py-24 px-5 md:px-8 relative overflow-hidden">
+  <section id="app" class="py-24 px-5 md:px-8 relative overflow-hidden">
     <div class="absolute inset-0 pointer-events-none opacity-30"
       style="background:radial-gradient(circle at 20% 30%, rgba(212,175,55,0.15), transparent 60%);"></div>
     <div class="max-w-6xl mx-auto relative grid lg:grid-cols-12 gap-12 items-center">
@@ -3344,6 +3344,12 @@
       { id: 'exposant-modulaire', category: 'exposants', file: 'assets/documents/dossier-reservation-exposant.pdf', formId: 'exposant_modulaire' },
       { id: 'exposant-business', category: 'exposants', file: 'assets/documents/dossier-reservation-exposant.pdf', formId: 'exposant_business' },
       {
+        id: 'exposant-dossier', category: 'exposants', variants: [
+          { lang: 'fr', file: 'assets/documents/dossier-exposants-fr.pdf' },
+          { lang: 'ar', file: 'assets/documents/dossier-exposants-ar.pdf' }
+        ]
+      },
+      {
         id: 'ambassade-guide', category: 'ambassades', variants: [
           { lang: 'fr', file: 'assets/documents/guide-ambassade-fr.pdf' },
           { lang: 'en', file: 'assets/documents/guide-ambassade-en.pdf' },
@@ -3359,7 +3365,7 @@
     /* ======================= TRANSLATIONS ======================= */
     const translations = {
       fr: {
-        nav: { brandSub: "Tunis Global Village", home: "Accueil", concept: "Concept", pavillons: "Pavillons", lab: "Future Food Lab", programmation: "Programmation", zones: "8 Zones", coins: "SFFF Coins", tarifs: "Tarifs", documents: "Documents", espacePro: "Espace Pro", espaceAmbassade: "Ambassades", reserver: "Réserver mon Passeport", language: "Langue", seeMore: "Voir plus" },
+        nav: { brandSub: "Tunis Global Village", home: "Accueil", concept: "Concept", pavillons: "Pavillons", lab: "Future Food Lab", programmation: "Programmation", zones: "8 Zones", app: "SFFF App", tarifs: "Tarifs", documents: "Documents", espacePro: "Espace Pro", espaceAmbassade: "Ambassades", reserver: "Réserver mon Passeport", language: "Langue", seeMore: "Voir plus" },
         documents: {
           eyebrow: "Ressources", title: "Documents Utiles",
           intro: "Consultez ou téléchargez les dossiers officiels du festival, classés par profil. Les formulaires marqués « Remplir en ligne » peuvent être complétés directement sur le site.",
@@ -3373,6 +3379,7 @@
             'sponsor-fiche': { title: "Fiche de Réservation Sponsor", desc: "Bon de commande à compléter pour réserver votre pack de partenariat." },
             'exposant-modulaire': { title: "Dossier de Réservation — Packs Modulaires & Mobiles", desc: "Tentes, kiosques et brouettes mobiles." },
             'exposant-business': { title: "Dossier de Réservation — Packs Business & Premium", desc: "Containers et structures premium." },
+            'exposant-dossier': { title: "Dossier Exposants", desc: "Présentation complète du festival, des zones d'exposition et des packs disponibles pour les exposants, disponible en français et en arabe." },
             'ambassade-guide': { title: "Guide des Ambassades", desc: "Zones régionales, pavillons nationaux et protocole d'accueil diplomatique, disponible en français, anglais et arabe." },
             'ambassade-fiche': { title: "Fiche de Réservation Ambassade", desc: "Réservez votre pavillon national, votre zone régionale et vos animations protocolaires." },
             'presse-guide': { title: "Guide Presse & Influenceurs", desc: "Accréditations, Press Lounge, studio streaming et charte digitale des hashtags." },
@@ -3480,7 +3487,7 @@
         footer: { desc: "Le rendez-vous incontournable de l'été tunisien : gastronomie, culture et innovation réunies sur 1,8 km de corniche.", linksTitle: "Navigation", contactTitle: "Contact", location: "Tunis Lac II, Tunis, Tunisie", copyright: "© 2026 SFFF — Street & Fast Food Fest. Tous droits réservés." }
       },
       en: {
-        nav: { brandSub: "Tunis Global Village", home: "Home", concept: "Concept", pavillons: "Pavilions", lab: "Future Food Lab", programmation: "Program", zones: "8 Zones", coins: "SFFF Coins", tarifs: "Pricing", documents: "Documents", espacePro: "Pro Space", espaceAmbassade: "Embassies", reserver: "Get My Passport", language: "Language", seeMore: "See more" },
+        nav: { brandSub: "Tunis Global Village", home: "Home", concept: "Concept", pavillons: "Pavilions", lab: "Future Food Lab", programmation: "Program", zones: "8 Zones", app: "SFFF App", tarifs: "Pricing", documents: "Documents", espacePro: "Pro Space", espaceAmbassade: "Embassies", reserver: "Get My Passport", language: "Language", seeMore: "See more" },
         documents: {
           eyebrow: "Resources", title: "Useful Documents",
           intro: "View or download the festival's official documents, sorted by profile. Forms marked \"Fill Online\" can be completed directly on the site.",
@@ -3494,6 +3501,7 @@
             'sponsor-fiche': { title: "Sponsor Reservation Form", desc: "Order form to complete to reserve your partnership pack." },
             'exposant-modulaire': { title: "Exhibitor Dossier — Modular & Mobile Packs", desc: "Tents, kiosks and mobile carts." },
             'exposant-business': { title: "Exhibitor Dossier — Business & Premium Packs", desc: "Containers and premium structures." },
+            'exposant-dossier': { title: "Exhibitor Booklet", desc: "Full presentation of the festival, exhibition zones and available exhibitor packs, available in French and Arabic." },
             'ambassade-guide': { title: "Embassy Guide", desc: "Regional zones, national pavilions and diplomatic welcome protocol, available in French, English and Arabic." },
             'ambassade-fiche': { title: "Embassy Reservation Form", desc: "Reserve your national pavilion, regional zone and protocol events." },
             'presse-guide': { title: "Press & Influencer Guide", desc: "Accreditations, Press Lounge, streaming studio and digital charter." },
@@ -3595,7 +3603,7 @@
         footer: { desc: "The unmissable event of the Tunisian summer: gastronomy, culture and innovation together along 1.8 km of waterfront.", linksTitle: "Navigation", contactTitle: "Contact", location: "Tunis Lac II, Tunis, Tunisia", copyright: "© 2026 SFFF — Street & Fast Food Fest. All rights reserved." }
       },
       ar: {
-        nav: { brandSub: "القرية العالمية تونس", home: "الرئيسية", concept: "المفهوم", pavillons: "الأجنحة", lab: "مختبر الطعام المستقبلي", programmation: "البرنامج", zones: "المناطق 8", coins: "عملات SFFF", tarifs: "الأسعار", documents: "الوثائق", espacePro: "فضاء المحترفين", espaceAmbassade: "السفارات", reserver: "احجز جواز سفري", language: "اللغة", seeMore: "عرض المزيد" },
+        nav: { brandSub: "القرية العالمية تونس", home: "الرئيسية", concept: "المفهوم", pavillons: "الأجنحة", lab: "مختبر الطعام المستقبلي", programmation: "البرنامج", zones: "المناطق 8", app: "تطبيق SFFF", tarifs: "الأسعار", documents: "الوثائق", espacePro: "فضاء المحترفين", espaceAmbassade: "السفارات", reserver: "احجز جواز سفري", language: "اللغة", seeMore: "عرض المزيد" },
         documents: {
           eyebrow: "الموارد", title: "وثائق مفيدة",
           intro: "اطّلع على وثائق المهرجان الرسمية أو حمّلها، مصنّفة حسب الفئة. النماذج المصنّفة بـ«التعبئة عبر الإنترنت» يمكن ملؤها مباشرة على الموقع.",
@@ -3609,6 +3617,7 @@
             'sponsor-fiche': { title: "استمارة حجز الرعاية", desc: "استمارة الطلب الواجب تعبئتها لحجز باقة الشراكة." },
             'exposant-modulaire': { title: "ملف حجز العارضين — باقات متنقلة وقابلة للتركيب", desc: "خيام، أكشاك وعربات متنقلة." },
             'exposant-business': { title: "ملف حجز العارضين — باقات أعمال ومميزة", desc: "حاويات وهياكل مميزة." },
+            'exposant-dossier': { title: "ملف العارضين", desc: "عرض كامل للمهرجان ومناطق العرض والباقات المتاحة للعارضين، متوفر بالفرنسية والعربية." },
             'ambassade-guide': { title: "دليل السفارات", desc: "المناطق الجهوية والأجنحة الوطنية وبروتوكول الاستقبال الدبلوماسي، متوفر بالفرنسية والإنجليزية والعربية." },
             'ambassade-fiche': { title: "استمارة حجز السفارة", desc: "احجز جناحك الوطني ومنطقتك الجهوية وفعالياتك البروتوكولية." },
             'presse-guide': { title: "دليل الصحافة والمؤثرين", desc: "الاعتمادات، صالة الصحافة، استوديو البث والميثاق الرقمي." },
