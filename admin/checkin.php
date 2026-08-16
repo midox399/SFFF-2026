@@ -40,7 +40,7 @@ require __DIR__ . '/../includes/admin_layout_head.php';
   <div id="result"></div>
 </div>
 
-<h1 style="font-size:1.1rem;margin-top:2rem;">Derniers scans</h1>
+<h1 class="section-heading">Derniers scans</h1>
 <?php if (!$recentScans): ?>
   <div class="empty-state">Aucun scan pour le moment.</div>
 <?php else: ?>

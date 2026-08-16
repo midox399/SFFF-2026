@@ -56,22 +56,28 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 $pageTitle = 'Connexion';
 require __DIR__ . '/../includes/admin_layout_head.php';
 ?>
-<div style="max-width:380px;margin:4rem auto;">
-  <h1>Connexion Admin</h1>
-  <?php if ($error): ?>
-    <div class="error-box"><?= h($error) ?></div>
-  <?php endif; ?>
-  <form method="post" style="display:flex;flex-direction:column;gap:0.9rem;">
-    <?= csrf_field() ?>
-    <div>
-      <label style="display:block;font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem;">E-mail</label>
-      <input type="email" name="email" required autocomplete="username" style="width:100%;">
+<div class="login-shell">
+  <div class="login-card">
+    <div class="login-header">
+      <p class="eyebrow">Accès Restreint</p>
+      <h1>SFFF 2026 — Admin Access</h1>
+      <div class="login-divider"></div>
     </div>
-    <div>
-      <label style="display:block;font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem;">Mot de passe</label>
-      <input type="password" name="password" required autocomplete="current-password" style="width:100%;">
-    </div>
-    <button type="submit">Se connecter</button>
-  </form>
+    <?php if ($error): ?>
+      <div class="error-box"><?= h($error) ?></div>
+    <?php endif; ?>
+    <form method="post" class="login-form">
+      <?= csrf_field() ?>
+      <div class="login-field">
+        <label>E-mail</label>
+        <input type="email" name="email" required autocomplete="username">
+      </div>
+      <div class="login-field">
+        <label>Mot de passe</label>
+        <input type="password" name="password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-submit">Se connecter</button>
+    </form>
+  </div>
 </div>
 <?php require __DIR__ . '/../includes/admin_layout_foot.php'; ?>
