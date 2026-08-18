@@ -1803,6 +1803,191 @@
       }
     }
 
+    /* ======================= HERO: 3D flip-card passport (front/back PNG, no 3D model) ======================= */
+    .hero-passport-stage {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 280px;
+      height: 373px;
+      /* Base transform centers the stage; JS appends translate/scale for the
+         scroll-docking animation on top of this via a CSS custom property. */
+      transform: translate(-50%, -50%) translate(var(--hp-x, 0px), var(--hp-y, 0px)) scale(var(--hp-scale, 1));
+      transform-origin: center center;
+      perspective: 1600px;
+      z-index: 2;
+      pointer-events: none;
+      transition: transform 0.15s linear;
+    }
+
+    /* Shadow lives on its own layer, never on the preserve-3d card itself —
+       a filter on a preserve-3d element flattens Chrome/WebKit's 3D
+       rendering context, which silently breaks backface-visibility (the
+       "back" face ends up showing a mirrored front face instead).
+       The stage itself ignores pointer events (it's fixed over hero text,
+       clicks must pass through), but this layer re-enables them so
+       hovering the actual passport graphic can trigger the showcase spin. */
+    .hero-passport-shadow {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.6));
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    /* Ambient gold glow behind the passport, only while it's floating at
+       rest — fades out once scrolling starts (JS toggles .is-scrolling on
+       the stage, which this rule keys off). */
+    .hero-passport-glow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 160%;
+      height: 160%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, rgba(212, 175, 55, 0.14) 45%, rgba(212, 175, 55, 0) 72%);
+      filter: blur(22px);
+      z-index: -1;
+      pointer-events: none;
+      animation: heroPassportGlowPulse 5s ease-in-out infinite;
+      transition: opacity 0.4s ease;
+    }
+
+    .hero-passport-stage.is-scrolling .hero-passport-glow {
+      animation: none;
+      opacity: 0;
+    }
+
+    @keyframes heroPassportGlowPulse {
+
+      0%,
+      100% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+
+    .hero-passport-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      animation: heroPassportSpin 9s linear infinite, heroPassportFloat 5.5s ease-in-out infinite;
+    }
+
+    /* Scroll-driven flip (front → back): as soon as scrolling starts, the
+       idle spin/float animation stops and the card's rotation is driven
+       directly by JS via --hp-flip, tracking scroll progress through the
+       whole shrink/dock sequence (not just the final docked instant). */
+    .hero-passport-stage.is-scrolling .hero-passport-card {
+      animation: none;
+      transform: rotateY(var(--hp-flip, 0deg));
+    }
+
+    .hero-passport-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.25);
+    }
+
+    .hero-passport-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .hero-passport-face-back {
+      transform: rotateY(180deg);
+    }
+
+    @keyframes heroPassportSpin {
+      0% {
+        transform: rotateY(0deg);
+      }
+
+      100% {
+        transform: rotateY(360deg);
+      }
+    }
+
+    @keyframes heroPassportFloat {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-16px);
+      }
+    }
+
+    /* Hover showcase: pause the idle spin/float and run one deliberate,
+       slower full rotation (front → edge → back → edge → front) instead.
+       Only while resting (not docked) and only where hover makes sense
+       (mouse, not touch). */
+    @media (hover: hover) {
+      .hero-passport-stage:not(.is-docked):hover .hero-passport-card {
+        animation: heroPassportShowcase 2.4s ease-in-out;
+      }
+    }
+
+    @keyframes heroPassportShowcase {
+      0% {
+        transform: rotateY(var(--hp-flip, 0deg)) scale(1);
+      }
+
+      15% {
+        transform: rotateY(calc(var(--hp-flip, 0deg) + 90deg)) scale(1.08);
+      }
+
+      50% {
+        transform: rotateY(calc(var(--hp-flip, 0deg) + 180deg)) scale(1.08);
+      }
+
+      85% {
+        transform: rotateY(calc(var(--hp-flip, 0deg) + 270deg)) scale(1.08);
+      }
+
+      100% {
+        transform: rotateY(calc(var(--hp-flip, 0deg) + 360deg)) scale(1);
+      }
+    }
+
+    @media (max-width: 900px) {
+      /* No room beside or above the hero text on small screens without
+         overlapping it — the flat passport-hero-rig image in the Tarifs
+         section already represents the passport on mobile. */
+      .hero-passport-stage {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-passport-card {
+        animation: none !important;
+      }
+
+      .hero-passport-stage {
+        transition: none !important;
+      }
+
+      .hero-passport-glow {
+        animation: none !important;
+      }
+    }
+
     /* ======================= SFFF COINS: 3D app.png rig + pinned labels ======================= */
     .coins-3d-rig {
       position: relative;
@@ -1946,6 +2131,24 @@
 </head>
 
 <body class="grain preload-lock">
+
+  <!-- ================= HERO 3D PASSPORT (CSS flip-card, front/back PNG) =================
+       Fixed-position so it can float above the hero at rest, then dock into a
+       corner as the user scrolls. Toggled/positioned by JS (see initHeroPassport).
+       Clicking it jumps to the Passeports & Tarifs section. -->
+  <div id="heroPassportStage" class="hero-passport-stage">
+    <div class="hero-passport-glow" aria-hidden="true"></div>
+    <a href="#tarifs" class="hero-passport-shadow" aria-label="Voir les passeports et tarifs">
+      <div class="hero-passport-card">
+        <div class="hero-passport-face hero-passport-face-front">
+          <img src="assets/front.webp" alt="" loading="eager">
+        </div>
+        <div class="hero-passport-face hero-passport-face-back">
+          <img src="assets/back.webp" alt="" loading="eager">
+        </div>
+      </div>
+    </a>
+  </div>
 
   <!-- ================= PRELOADER ================= -->
   <div id="sitePreloader" aria-hidden="true">
@@ -5055,6 +5258,98 @@
         tilt.style.transform = '';
         tilt.style.animation = '';
       });
+    })();
+
+    /* ======================= HERO 3D PASSPORT: scroll dock ======================= */
+    // At rest (scrollY 0), the passport floats centered/large over the hero.
+    // As the user scrolls through the hero's height, it shrinks and slides
+    // into the top-right corner, where it stays pinned (docked) while
+    // browsing the rest of the page — a persistent mini passport widget.
+    (function initHeroPassport() {
+      const stage = document.getElementById('heroPassportStage');
+      const heroSection = document.getElementById('accueil');
+      if (!stage || !heroSection) return;
+
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const DOCK_SCALE = 0.32;
+
+      // Below 900px the stage is hidden entirely via CSS (no room beside or
+      // above the hero text without overlapping it) — this rig only runs
+      // its layout math for the side-of-text desktop/tablet case.
+      const MOBILE_HIDE_WIDTH = 900;
+
+      // Natural (unscaled) stage size — matches the CSS width, kept in sync
+      // manually since we need the number in JS for layout math (reading it
+      // back out of computed styles mid-transition is unreliable).
+      const STAGE_NATURAL_WIDTH = 280;
+
+      function restLayout() {
+        const naturalW = STAGE_NATURAL_WIDTH;
+        const titleEl = document.getElementById('heroTitleLine1');
+        const titleRect = titleEl ? titleEl.getBoundingClientRect() : null;
+        const heroTextHalfWidth = titleRect ? titleRect.width / 2 : 380;
+        const edgeMargin = 20;
+        const availableForStage = (window.innerWidth / 2) - heroTextHalfWidth - 32 - edgeMargin;
+        const scale = Math.max(0.55, Math.min(1, availableForStage / naturalW));
+        const x = heroTextHalfWidth + (naturalW * scale) / 2 + 32;
+        return { x, y: -20, scale };
+      }
+
+      function dockOffset() {
+        const margin = 28;
+        const stageRect = stage.getBoundingClientRect();
+        const targetCenterX = window.innerWidth - margin - stageRect.width * DOCK_SCALE / 2;
+        const targetCenterY = margin + stageRect.height * DOCK_SCALE / 2 + 56; // clear the sticky nav
+        const restCenterX = window.innerWidth / 2;
+        const restCenterY = window.innerHeight / 2;
+        return {
+          x: targetCenterX - restCenterX,
+          y: targetCenterY - restCenterY
+        };
+      }
+
+      let ticking = false;
+      function update() {
+        ticking = false;
+        if (window.innerWidth < MOBILE_HIDE_WIDTH) return; // hidden via CSS, skip the layout work
+        const heroHeight = heroSection.offsetHeight || window.innerHeight;
+        const progress = Math.min(1, Math.max(0, window.scrollY / (heroHeight * 0.85)));
+        const eased = progress * progress * (3 - 2 * progress); // smoothstep
+
+        const rest = restLayout();
+        const dock = dockOffset();
+        const scale = reduceMotion
+          ? (progress > 0.5 ? DOCK_SCALE : rest.scale)
+          : rest.scale - eased * (rest.scale - DOCK_SCALE);
+        const x = rest.x + (dock.x - rest.x) * eased;
+        const y = rest.y + (dock.y - rest.y) * eased;
+
+        // Flip front → back over the first 60% of the scroll range, so it
+        // completes mid-shrink and settles on the back cover well before
+        // the passport finishes docking into the corner.
+        const flipProgress = Math.min(1, progress / 0.6);
+        const flipEased = flipProgress * flipProgress * (3 - 2 * flipProgress);
+        const flipDeg = reduceMotion ? (progress > 0.3 ? 180 : 0) : flipEased * 180;
+
+        stage.style.setProperty('--hp-scale', String(scale));
+        stage.style.setProperty('--hp-x', `${x}px`);
+        stage.style.setProperty('--hp-y', `${y}px`);
+        stage.style.setProperty('--hp-flip', `${flipDeg}deg`);
+
+        stage.classList.toggle('is-scrolling', progress > 0.001);
+        stage.classList.toggle('is-docked', progress > 0.92);
+      }
+
+      function onScroll() {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      update();
     })();
 
     /* ======================= SMART COUNTDOWN ======================= */
