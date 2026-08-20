@@ -15,6 +15,7 @@ require_once __DIR__ . '/../includes/http.php';
 require_once __DIR__ . '/../includes/pricing.php';
 
 require_post_method();
+check_sec_fetch_site();
 
 // Valid passport type slugs come from includes/pricing.php (the single
 // source of truth for prices) — must match the `slug` field on each entry
@@ -25,6 +26,11 @@ $body = read_json_body();
 
 $fullName = trim((string)($body['fullName'] ?? ''));
 $email = trim((string)($body['email'] ?? ''));
+
+// Rate-limited by email+IP together (not IP alone), so a rotated-IP attack
+// against one target email is still throttled, and a shared/proxied IP
+// doesn't collapse unrelated visitors into one bucket.
+api_rate_limit_check('reservation:' . strtolower($email) . '|' . ($_SERVER['REMOTE_ADDR'] ?? ''), 10, 900);
 $phone = trim((string)($body['phone'] ?? ''));
 $quantityRaw = $body['quantity'] ?? null;
 $passportType = trim((string)($body['passportType'] ?? ''));

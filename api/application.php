@@ -16,6 +16,7 @@ require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/http.php';
 
 require_post_method();
+check_sec_fetch_site();
 
 // Canonical (English) labels stored in the DB, indexed to match the tab
 // order in index.html's pro.tabs arrays: ["Investisseur","Sponsor",
@@ -33,6 +34,9 @@ $body = read_json_body();
 
 $fullName = trim((string)($body['fullName'] ?? ''));
 $email = trim((string)($body['email'] ?? ''));
+
+// Rate-limited by email+IP together — see api/passport-reservation.php.
+api_rate_limit_check('application:' . strtolower($email) . '|' . ($_SERVER['REMOTE_ADDR'] ?? ''), 10, 900);
 $phone = trim((string)($body['phone'] ?? ''));
 $typeIndexRaw = $body['applicationTypeIndex'] ?? null;
 $message = trim((string)($body['message'] ?? ''));

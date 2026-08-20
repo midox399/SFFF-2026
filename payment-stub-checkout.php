@@ -15,6 +15,59 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/db.php';
 
 $reference = trim((string)($_GET['ref'] ?? ''));
+
+// This endpoint performs the actual "webhook call" server-side, so
+// PAYMENT_WEBHOOK_SECRET never has to be sent to (or read from) the
+// browser. The page's own JS below just POSTs here with no secret
+// attached; this block does the real server-to-server call and relays
+// the result back as JSON. Never echo PAYMENT_WEBHOOK_SECRET into any
+// HTML/JS output — this is the one place it's used, entirely server-side.
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_GET['action'] ?? '') === 'simulate') {
+    header('Content-Type: application/json; charset=utf-8');
+
+    if ($reference === '') {
+        http_response_code(422);
+        echo json_encode(['success' => false, 'error' => 'Missing reference.']);
+        exit;
+    }
+
+    $pdo = get_db(); // loads config/database.php, defining PAYMENT_WEBHOOK_SECRET
+    if (!defined('PAYMENT_WEBHOOK_SECRET')) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Webhook secret is not configured.']);
+        exit;
+    }
+
+    $payload = json_encode([
+        'reference' => $reference,
+        'event_id' => 'stub-' . time() . '-' . bin2hex(random_bytes(4)),
+        'event_type' => 'payment.succeeded',
+        'provider' => 'stub',
+    ]);
+
+    $selfUrl = (($_SERVER['HTTPS'] ?? '') !== '' && ($_SERVER['HTTPS'] ?? 'off') !== 'off' ? 'https://' : 'http://')
+        . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/api/payment-webhook.php';
+
+    $ch = curl_init($selfUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'X-Webhook-Secret: ' . PAYMENT_WEBHOOK_SECRET,
+        ],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 10,
+    ]);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    http_response_code($httpCode ?: 502);
+    echo $response !== false ? $response : json_encode(['success' => false, 'error' => 'Webhook relay failed.']);
+    exit;
+}
+
 $reservation = null;
 
 if ($reference !== '') {
@@ -59,18 +112,10 @@ if ($reference !== '') {
         e.preventDefault();
         document.getElementById('status').textContent = 'Envoi du webhook…';
         try {
-          const res = await fetch('api/payment-webhook.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Webhook-Secret': <?= json_encode(defined('PAYMENT_WEBHOOK_SECRET') ? PAYMENT_WEBHOOK_SECRET : '') ?>
-            },
-            body: JSON.stringify({
-              reference: <?= json_encode($reference) ?>,
-              event_id: 'stub-' + Date.now(),
-              event_type: 'payment.succeeded',
-              provider: 'stub'
-            })
+          // Relayed server-side (see the PHP block at the top of this file)
+          // so the real webhook secret never has to reach the browser.
+          const res = await fetch('payment-stub-checkout.php?action=simulate&ref=' + encodeURIComponent(<?= json_encode($reference) ?>), {
+            method: 'POST'
           });
           const data = await res.json();
           if (data.success) {

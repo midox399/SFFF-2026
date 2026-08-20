@@ -9,7 +9,7 @@
  *
  * Deliberately does NOT show anything for a reservation that isn't paid
  * yet — this page's whole point is proof of a completed passport purchase,
- * and the reference itself is a random 5-character code (see
+ * and the reference itself is a random 8-character code (see
  * includes/http.php's generate_reference()), not a guessable sequential
  * id, so this is safe to be reachable without a login.
  */

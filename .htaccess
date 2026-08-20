@@ -1,0 +1,14 @@
+# Security response headers (F-04, security audit — see BACKEND_SETUP.md).
+# Hostinger's LiteSpeed shared hosting runs in Apache-compatible mode and
+# honors mod_headers directives in .htaccess.
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Short max-age deliberately: HSTS is sticky in the browser for its
+    # whole max-age window, so a short value here limits the blast radius
+    # if HTTPS ever needs to be rolled back. Raise this once a few days of
+    # real HTTPS traffic confirm nothing breaks — see BACKEND_SETUP.md.
+    Header always set Strict-Transport-Security "max-age=3600"
+</IfModule>

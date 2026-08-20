@@ -107,9 +107,42 @@ with the admin account from step 3.
 
 - Open the site, go to Billetterie, pick a passport, fill the checkout form,
   submit. You should land on the existing "Commande Confirmée !" success
-  modal with a real reference like `GV-2026-8F42K` — and the row should
+  modal with a real reference like `GV-2026-8F42KQR9` — and the row should
   appear in `/admin/passports.php`.
 - Same for the "Espace Professionnels" form → check `/admin/applications.php`.
+
+## Security hardening (pre-launch)
+
+A pre-launch security review flagged a few gaps on the public API
+endpoints, all fixed as of this pass:
+
+- **Rate limiting**: `api/passport-reservation.php`, `api/application.php`,
+  and `api/payment-init.php` are now throttled via `api_rate_limit_check()`
+  in `includes/http.php` — same file-based approach as the admin login
+  limiter, no extra DB table. Reservation/application creation is limited
+  per email+IP; payment-init lookups are limited per reference+IP.
+- **Reference length**: `generate_reference()` now generates 8-character
+  codes (≈1.1×10^12 combinations) instead of 5, making the reference space
+  impractical to brute-force even before rate limiting kicks in.
+- **No paid/unpaid oracle**: `api/payment-init.php` returns the same
+  generic "Invalid or expired reference." response whether a reference
+  doesn't exist or already belongs to a paid reservation — it no longer
+  reveals which case it was.
+- **Security headers**: `.htaccess` at the project root sets
+  `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, and a
+  short-lived `Strict-Transport-Security` header. **The HSTS `max-age` is
+  deliberately short (1 hour) for now** — after a few days of confirming
+  the live site serves cleanly over HTTPS with no issues, raise it in
+  `.htaccess` (e.g. to `max-age=15552000` for 6 months, then consider
+  `includeSubDomains`/`preload`). Don't raise it before that's confirmed:
+  HSTS is sticky in the browser for its whole `max-age`, so a long value
+  set too early makes any HTTPS misconfiguration harder to roll back from.
+- **Sec-Fetch-Site check**: the three public POST endpoints reject requests
+  whose `Sec-Fetch-Site` header is explicitly `cross-site` (via
+  `check_sec_fetch_site()`) as a cheap defense-in-depth layer against
+  scripted cross-site abuse — this is not a CSRF token and isn't meant to
+  replace one; the admin panel's own forms already have real session-based
+  CSRF protection (`includes/auth.php`) which this doesn't change.
 
 ## Wiring up the real payment provider (Attijari Bank Tunisie)
 
