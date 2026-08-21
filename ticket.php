@@ -290,7 +290,9 @@ $passportLabel = $isPaid ? ($passportLabels[$reservation['passport_type']] ?? $r
   </div>
 
   <?php if ($isPaid): ?>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+    integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU"
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     (function () {
       var el = document.getElementById('qrcode');

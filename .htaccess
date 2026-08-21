@@ -12,3 +12,23 @@
     # real HTTPS traffic confirm nothing breaks — see BACKEND_SETUP.md.
     Header always set Strict-Transport-Security "max-age=3600"
 </IfModule>
+
+# Block direct public access to dev/reference files that are never loaded
+# by the app itself: the DB schema/dump, setup docs, and Node tooling
+# config. None of these are fetched or linked by any page — they only need
+# to exist in the deployed folder because this project has no build step
+# that would otherwise keep them out of the web root.
+<FilesMatch "\.(sql|md|log|lock|bak|backup|swp|sh|ini)$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "^(package(-lock)?\.json|tailwind\.config\.js|postcss\.config\.js|composer\.(json|lock))$">
+    Require all denied
+</FilesMatch>
+
+# Belt-and-suspenders: deny any dotfile (.env, .git/config, etc.) even if
+# Hostinger's own edge-level block were ever misconfigured or bypassed.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+Options -Indexes
