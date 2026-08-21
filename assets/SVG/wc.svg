@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Calque_2" data-name="Calque 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6.5 6.65">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        font-family: Baloo-Regular, Baloo;
+        font-size: 4.19px;
+      }
+
+      .cls-2 {
+        fill: #0096ff;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: .25px;
+      }
+    </style>
+  </defs>
+  <g id="Calque_1-2" data-name="Calque 1">
+    <circle class="cls-2" cx="3.25" cy="3.25" r="3.25"/>
+    <text class="cls-1" transform="translate(.91 4.45) scale(.78 1)"><tspan x="0" y="0">WC</tspan></text>
+    <circle class="cls-3" cx="3.25" cy="3.25" r="3.01"/>
+  </g>
+</svg>
