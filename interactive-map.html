@@ -5,17 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interactive Festival Map SFFF 2026</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #0f172a;
-      --panel-bg: rgba(15, 23, 42, 0.85);
-      --panel-border: rgba(255, 255, 255, 0.1);
+      --bg-color: #070708;
+      --panel-bg: rgba(20, 20, 22, 0.9);
+      --panel-border: rgba(212, 175, 55, 0.3);
       --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --accent-color: #3b82f6;
-      --zone-hover: rgba(255, 255, 255, 0.3);
-      --zone-color: rgba(59, 130, 246, 0.5);
+      --text-secondary: #9CA3AF;
+      --accent-color: #D4AF37;
+      --accent-hi: #F3E5AB;
+      --zone-hover: rgba(212, 175, 55, 0.35);
+      --zone-color: rgba(212, 175, 55, 0.5);
     }
 
     body {
@@ -23,7 +24,7 @@
       overflow: hidden;
       background: var(--bg-color);
       color: var(--text-primary);
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
     #map-container {
@@ -85,10 +86,10 @@
     #tooltip {
       position: absolute;
       pointer-events: none;
-      background: rgba(10, 12, 16, 0.85);
+      background: rgba(10, 12, 16, 0.9);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #fff;
+      border: 1px solid var(--panel-border);
+      color: var(--accent-hi);
       padding: 8px 14px;
       border-radius: 8px;
       font-size: 14px;
@@ -104,77 +105,84 @@
     /* Side Panel */
     #side-panel {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 400px;
-      height: 100%;
+      top: 16px;
+      left: 16px;
+      width: 300px;
+      max-width: calc(100vw - 32px);
       background: var(--panel-bg);
       backdrop-filter: blur(12px);
-      border-left: 1px solid var(--panel-border);
-      transform: translateX(100%);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      transform: translateY(-16px) scale(0.96);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
       z-index: 200;
-      display: flex;
-      flex-direction: column;
-      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     #side-panel.open {
-      transform: translateX(0);
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .close-btn {
       position: absolute;
-      top: 16px;
-      right: 16px;
+      top: 10px;
+      right: 10px;
       background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #fff;
-      width: 36px;
-      height: 36px;
+      border: 1px solid var(--panel-border);
+      color: var(--accent-hi);
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 13px;
       transition: 0.2s ease;
     }
 
     .close-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--accent-color);
       transform: scale(1.05);
     }
 
     .panel-content {
-      padding: 32px;
-      padding-top: 80px;
+      padding: 18px;
+      padding-top: 20px;
+      padding-right: 40px;
     }
 
     .panel-badge {
       display: inline-block;
-      padding: 6px 12px;
-      background: rgba(59, 130, 246, 0.15);
-      color: var(--accent-color);
-      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 4px 10px;
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--accent-hi);
+      border: 1px solid var(--panel-border);
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 1px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       text-transform: uppercase;
     }
 
     #panel-title {
-      font-size: 28px;
-      margin-bottom: 20px;
+      font-size: 18px;
+      margin-bottom: 8px;
       font-weight: 700;
+      color: var(--accent-hi);
     }
 
     #panel-description {
-      font-size: 16px;
+      font-size: 13px;
       color: var(--text-secondary);
-      line-height: 1.7;
+      line-height: 1.5;
+      margin: 0;
     }
 
     /* Loading state */
@@ -192,19 +200,9 @@
     /* Add some media queries for responsiveness */
     @media (max-width: 768px) {
       #side-panel {
-        width: 100%;
-        height: auto;
-        max-height: 80vh;
-        top: auto;
-        bottom: 0;
-        border-left: none;
-        border-top: 1px solid var(--panel-border);
-        transform: translateY(100%);
-        border-radius: 24px 24px 0 0;
-      }
-
-      #side-panel.open {
-        transform: translateY(0);
+        width: calc(100vw - 24px);
+        left: 12px;
+        top: 12px;
       }
     }
   </style>
@@ -215,7 +213,7 @@
 
   <div id="map-container">
     <div id="svg-wrapper">
-      <img src="assets/SVG/map.png" id="map-bg" alt="Map Background">
+      <img src="assets/SVG/map.webp" id="map-bg" alt="Map Background">
       <?xml version="1.0" encoding="UTF-8"?>
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1065.75 549.75">
         <defs>
@@ -1071,41 +1069,46 @@
     ];
 
     const zoneConfig = {
-      'zone-4': { title: 'Main Area', category: 'General', description: 'Main festival grounds.' },
-      'zone-13': { title: 'VIP Parking', category: 'Services', description: 'Exclusive parking for VIP guests.' },
-      'zone-28': { title: 'Zone Europe', category: 'Pavilion', description: 'Experience the rich culture of Europe.' },
-      'zone-47': { title: 'Zone Latina', category: 'Pavilion', description: 'Discover the rhythm of Latin America.' },
-      'zone-61': { title: 'Event Zone', category: 'Entertainment', description: 'Main stage and live events.' },
-      'zone-18': { title: 'Hub Central', category: 'General', description: 'The central gathering point of the festival.' },
-      'zone-25': { title: 'Diplomatic & B2B Zone', category: 'Business', description: 'Exclusive area for networking and diplomacy.' },
-      'zone-26': { title: 'Zone Orient', category: 'Pavilion', description: 'Explore the wonders of the Orient.' },
-      'zone-45': { title: 'Zone Africa', category: 'Pavilion', description: 'Celebrate the vibrant spirit of Africa.' },
-      'zone-117': { title: 'VIP Lounge', category: 'Lounge', description: 'Premium relaxation area for VIP guests.' },
-      'zone-123': { title: 'Diplomatic Lounge', category: 'Lounge', description: 'Private lounge for diplomats and dignitaries.' },
-      'zone-127': { title: 'Future Food Lab', category: 'Food & Tech', description: 'Innovative culinary experiences.' },
-      'zone-57': { title: 'Urban Area', category: 'General', description: 'Explore the urban landscape.' },
-      'zone-48': { title: 'Mediterranean Zone', category: 'Pavilion', description: 'Experience the Mediterranean lifestyle.' },
-      'zone-69': { title: 'Fresh Zone', category: 'Food & Drink', description: 'Fresh food and beverages.' },
-      'zone-129': { title: 'Gaming Zone', category: 'Entertainment', description: 'Interactive gaming and esports.' },
-      'zone-77': { title: 'Chill Zone', category: 'Lounge', description: 'A place to relax and unwind.' },
-      'zone-73': { title: 'Sunset Zone', category: 'Entertainment', description: 'Enjoy the perfect sunset views.' },
-      'zone-49': { title: 'Urban Zone', category: 'Pavilion', description: 'Street culture and urban art.' },
-      'zone-65': { title: 'Business Lounge', category: 'Business', description: 'Quiet space for professionals.' },
-      'zone-50': { title: 'Kids Zone', category: 'Family', description: 'Fun and games for children.' },
-      'zone-51': { title: 'America Zone', category: 'Pavilion', description: 'Discover the Americas.' },
-      'zone-14': { title: 'Tunisia Zone', category: 'Pavilion', description: 'Experience the heart of Tunisia.' },
-      'zone-92': { title: 'Check Point (Info Desk)', category: 'Services', description: 'Information desk for pop-ups.' },
-      'zone-88': { title: 'Restrooms (WC)', category: 'Facilities', description: 'Public restrooms.' },
-      'zone-125': { title: 'Medical Point', category: 'Health', description: 'First aid and medical services.' },
-      'zone-110': { title: 'Warehouse', category: 'Logistics', description: 'Event storage and logistics.' }
+      'zone-4': { title: 'Main Area', category: 'General', description: 'The heart of the festival grounds, connecting every pavilion and lounge — start here to get your bearings.' },
+      'zone-13': { title: 'VIP Parking', category: 'Services', description: 'Reserved, secured parking steps from the entrance for VIP badge holders — no need to compete for a spot.' },
+      'zone-28': { title: 'Zone Europe', category: 'Pavilion', description: 'A curated pavilion of European exhibitors, cuisine, and cultural showcases spanning the continent.' },
+      'zone-47': { title: 'Zone Latina', category: 'Pavilion', description: 'Live music, food stalls, and exhibitors bringing the color and rhythm of Latin America to the festival.' },
+      'zone-61': { title: 'Event Zone', category: 'Entertainment', description: 'The main stage — home to headline performances, ceremonies, and the festival\'s biggest live moments.' },
+      'zone-18': { title: 'Hub Central', category: 'General', description: 'The central crossroads of the festival — signage, directions, and quick access to every major zone.' },
+      'zone-25': { title: 'Diplomatic & B2B Zone', category: 'Business', description: 'A dedicated space for trade delegations, embassy representatives, and B2B meetings away from the crowds.' },
+      'zone-26': { title: 'Zone Orient', category: 'Pavilion', description: 'Exhibitors, crafts, and flavors from across the Orient, showcased in a dedicated cultural pavilion.' },
+      'zone-45': { title: 'Zone Africa', category: 'Pavilion', description: 'A vibrant pavilion celebrating African music, art, and cuisine from across the continent.' },
+      'zone-117': { title: 'VIP Lounge', category: 'Lounge', description: 'A private, air-conditioned lounge with refreshments and seating reserved exclusively for VIP guests.' },
+      'zone-123': { title: 'Diplomatic Lounge', category: 'Lounge', description: 'A quiet, secured lounge reserved for diplomats and official delegations attending the festival.' },
+      'zone-127': { title: 'Future Food Lab', category: 'Food & Tech', description: 'A hands-on showcase of food-tech innovation — tastings, demos, and startups reimagining what we eat.' },
+      'zone-57': { title: 'Urban Area', category: 'General', description: 'A open-air stretch of the grounds featuring street art, pop-up vendors, and casual seating.' },
+      'zone-48': { title: 'Mediterranean Zone', category: 'Pavilion', description: 'Coastal cuisine, music, and crafts from across the Mediterranean, all in one pavilion.' },
+      'zone-69': { title: 'Fresh Zone', category: 'Food & Drink', description: 'Grab a quick bite or a cold drink — smoothies, snacks, and light bites to keep you going.' },
+      'zone-129': { title: 'Gaming Zone', category: 'Entertainment', description: 'Consoles, esports tournaments, and hands-on demos for gamers of every level.' },
+      'zone-77': { title: 'Chill Zone', category: 'Lounge', description: 'Shaded seating and low-key music — the spot to rest your feet between activities.' },
+      'zone-73': { title: 'Sunset Zone', category: 'Entertainment', description: 'An open viewing area timed for golden-hour views, live acoustic sets, and evening chill-out sessions.' },
+      'zone-49': { title: 'Urban Zone', category: 'Pavilion', description: 'Street art, graffiti walls, and urban culture exhibitors in a dedicated creative space.' },
+      'zone-65': { title: 'Business Lounge', category: 'Business', description: 'A quiet co-working style space with seating and Wi-Fi for professionals attending between meetings.' },
+      'zone-50': { title: 'Kids Zone', category: 'Family', description: 'Supervised games, crafts, and activities designed to keep younger visitors entertained safely.' },
+      'zone-51': { title: 'America Zone', category: 'Pavilion', description: 'Exhibitors and cuisine spanning North and South America, from street food to live music.' },
+      'zone-14': { title: 'Tunisia Zone', category: 'Pavilion', description: 'The festival\'s host-country pavilion, showcasing Tunisian craftsmanship, food, and traditions.' },
+      'zone-92': { title: 'Check Point (Info Desk)', category: 'Services', description: 'Staffed info desk for directions, lost & found, and general festival questions.' },
+      'zone-88': { title: 'Restrooms (WC)', category: 'Facilities', description: 'Public restrooms, regularly serviced throughout the day.' },
+      'zone-125': { title: 'Medical Point', category: 'Health', description: 'On-site first aid staffed by medical professionals — head here for any health concern or emergency.' },
+      'zone-110': { title: 'Warehouse', category: 'Logistics', description: 'Staff-only storage and logistics area supporting festival operations.' }
     };
 
-    // Default info for unmapped zones
-    const defaultZoneInfo = {
-      title: 'Unmapped Zone',
-      category: 'General',
-      description: 'Please update the zoneConfig dictionary in interactive-map.html to assign a name and description to this zone.'
-    };
+    // Default info for unmapped zones — falls back to the SVG's own data-name label
+    // instead of a dev-facing message, so visitors never see internal notes.
+    function getDefaultZoneInfo(id) {
+      const el = document.getElementById(id);
+      const label = el && el.getAttribute('data-name');
+      return {
+        title: label || 'Festival Area',
+        category: 'General',
+        description: 'More details coming soon for this area.'
+      };
+    }
 
     // --- MAP LOGIC ---
     const mapContainer = document.getElementById('map-container');
@@ -1131,12 +1134,16 @@
       const mapWidth = baseWidth * scale;
       const mapHeight = baseHeight * scale;
       
-      // Define limits allowing the map to be dragged to the edge but not infinitely
-      const limitX = Math.max(containerWidth, mapWidth) * 0.6;
-      const limitY = Math.max(containerHeight, mapHeight) * 0.6;
-      
-      translateX = Math.max(-limitX, Math.min(translateX, limitX));
-      translateY = Math.max(-limitY, Math.min(translateY, limitY));
+      // Center position when the map exactly fills the container, plus a small
+      // overscroll margin so it can't be dragged far past its own edges.
+      const margin = 80;
+      const centerX = -(mapWidth - containerWidth) / 2;
+      const centerY = -(mapHeight - containerHeight) / 2;
+      const rangeX = Math.max(0, (mapWidth - containerWidth) / 2) + margin;
+      const rangeY = Math.max(0, (mapHeight - containerHeight) / 2) + margin;
+
+      translateX = Math.max(centerX - rangeX, Math.min(translateX, centerX + rangeX));
+      translateY = Math.max(centerY - rangeY, Math.min(translateY, centerY + rangeY));
 
       svgWrapper.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     }
@@ -1217,7 +1224,7 @@
             if (el) el.classList.add('group-hover');
           });
 
-          const info = zoneConfig[configId] || { ...defaultZoneInfo, title: 'ID: ' + Array.from(relatedIds).join(', ') };
+          const info = zoneConfig[configId] || getDefaultZoneInfo(configId);
           tooltip.innerHTML = `<strong>${info.title}</strong><br>${info.category}`;
           tooltip.style.opacity = '1';
         });
@@ -1234,7 +1241,9 @@
 
         zone.addEventListener('click', (e) => {
           // Prevent drag click
-          if (Math.abs(startX - (e.clientX - translateX)) > 5) return;
+          const movedX = Math.abs(startX - (e.clientX - translateX));
+          const movedY = Math.abs(startY - (e.clientY - translateY));
+          if (movedX > 5 || movedY > 5) return;
 
           zones.forEach(z => z.classList.remove('active'));
           zone.classList.add('active');
@@ -1266,7 +1275,7 @@
             if (el) el.classList.add('active');
           });
 
-          const info = zoneConfig[configId] || { ...defaultZoneInfo, title: 'ID: ' + Array.from(relatedIds).join(', ') };
+          const info = zoneConfig[configId] || getDefaultZoneInfo(configId);
 
           document.getElementById('panel-title').textContent = info.title;
           document.getElementById('panel-category').textContent = info.category;
@@ -1275,6 +1284,36 @@
           sidePanel.classList.add('open');
         });
       });
+
+      warnUnmappedZones(zones);
+    }
+
+    // Dev-only console warning: lists zone IDs with no entry in zoneConfig,
+    // so gaps are caught before deploy instead of silently showing a generic label.
+    function warnUnmappedZones(zones) {
+      const unmapped = new Set();
+      zones.forEach(zone => {
+        let relatedIds = new Set([zone.id]);
+        let configId = zone.id;
+        let added;
+        do {
+          added = false;
+          for (const group of zoneGroups) {
+            if (group.some(gId => relatedIds.has(gId))) {
+              const sizeBefore = relatedIds.size;
+              group.forEach(gId => relatedIds.add(gId));
+              if (relatedIds.size > sizeBefore) added = true;
+              if (zoneConfig[group[0]]) configId = group[0];
+            }
+          }
+        } while (added);
+
+        if (!zoneConfig[configId]) unmapped.add(configId);
+      });
+
+      if (unmapped.size > 0) {
+        console.warn(`[interactive-map] ${unmapped.size} zone(s) missing from zoneConfig:`, Array.from(unmapped));
+      }
     }
 
     // Pan Logic
@@ -1372,6 +1411,16 @@
     document.getElementById('btn-close-panel').addEventListener('click', () => {
       sidePanel.classList.remove('open');
       document.querySelectorAll('.interactive-zone').forEach(z => z.classList.remove('active'));
+    });
+
+    // The parent page's "Réinitialiser" button lives outside this iframe and
+    // resets the map via postMessage.
+    window.addEventListener('message', (e) => {
+      if (e.data === 'resetMap') {
+        sidePanel.classList.remove('open');
+        document.querySelectorAll('.interactive-zone').forEach(z => z.classList.remove('active'));
+        resetView();
+      }
     });
 
     function resetView() {
