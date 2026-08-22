@@ -1435,6 +1435,19 @@
       box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
     }
 
+    /* Keyboard focus ring for interactive elements not otherwise given one
+       (buttons, cards, nav/text links) — mouse/touch users are unaffected
+       since :focus-visible only engages for keyboard navigation. */
+    a:focus-visible,
+    button:focus-visible,
+    .panel:focus-visible,
+    .nav-link:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 2px solid var(--gold-hi, #F3E5AB);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
     .stamp-badge {
       animation: stampPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
